@@ -3,6 +3,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import static io.restassured.RestAssured.*;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.json.simple.JSONObject;
 
@@ -23,19 +24,36 @@ public class GetRequest {
 	}
 	
 	@Test
-	public void test_Post()
+	public static void test_Post()
 	{	
-		JSONObject request = new JSONObject();
+		String requestbody = "{\r\n"
+				+ "  \"id\": 0,\r\n"
+				+ "  \"category\": {\r\n"
+				+ "    \"id\": 0,\r\n"
+				+ "    \"name\": \"string\"\r\n"
+				+ "  },\r\n"
+				+ "  \"name\": \"dogg2\",\r\n"
+				+ "  \"photoUrls\": [\r\n"
+				+ "    \"string\"\r\n"
+				+ "  ],\r\n"
+				+ "  \"tags\": [\r\n"
+				+ "    {\r\n"
+				+ "      \"id\": 0,\r\n"
+				+ "      \"name\": \"string\"\r\n"
+				+ "    }\r\n"
+				+ "  ],\r\n"
+				+ "  \"status\": \"available\"\r\n"
+				+ "}";
 		
-		System.out.println(request);
-		System.out.println(request.toJSONString());
-		
-		given().
-			body(request.toJSONString()).
-		when().
+		String Responsebody = given().
+			when().
+			contentType(ContentType.JSON).
+			body(requestbody).
 			post("https://petstore.swagger.io/v2/pet").
 		then().
-			statusCode(200);  
+			statusCode(200).extract().asString();  
+		System.out.println(Responsebody);
+
 	}
 
 
